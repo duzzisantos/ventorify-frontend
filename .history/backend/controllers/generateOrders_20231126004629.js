@@ -1,0 +1,75 @@
+const SalesSchema = require("../models/sales");
+const PDFDoc = require("pdfkit");
+const fs = require("fs");
+const nodemailer = require("nodemailer");
+
+exports.dispatchOrderSummary = async (req, res) => {
+  const { customerId } = req.body.salesOperations;
+
+  if (customerId) {
+    SalesSchema.find(customerId)
+      .then((data) => {
+        const doc = new PDFDoc();
+
+        const stream = fs.createWriteStream("orders.pdf");
+        doc.pipe(stream);
+
+        data.forEach((item) => {
+          doc
+            .fontSize(16)
+            .text(item.product, { underline: true })
+            .fontSize(12)
+            .text(item.category)
+            .fontSize(12)
+            .text(item.salesOperations.quantitySold)
+            .moveDown();
+        });
+
+        const pdfBuffer = [];
+        doc.on("data", (chunk) => pdfBuffer.push(chunk));
+        doc.end();
+
+        //Email and password for the sender
+        const requesterEmail = process.env.GMAIL_USERNAME;
+        const requesterPassword = process.env.GMAIL_PASSWORD;
+        const mailServerHost = process.env.HOST;
+
+        //Email parameters
+        const emailTransporter = nodemailer.createTransport({
+          auth: {
+            user: requesterEmail,
+            pass: requesterPassword,
+          },
+          host: mailServerHost,
+          secure: false,
+          port: 587,
+          tls: {
+            rejectUnauthorized: false,
+          },
+          debug: true,
+        });
+
+        const mailRecipient =
+          process.env.GMAIL_USERNAME && process.env.GMAIL_RECIPIENT;
+
+        let email = emailTransporter.sendMail({
+          from: "Ventorify Purchasing Team " + requesterEmail,
+          to: mailRecipient ?? req.body.recipient,
+          subject: req.body.subject,
+          text: `Dear ${req.body.recipient ?? mailRecipient},`,
+          attachments: [
+            {
+              filename: `${customerId}-orders.pdf`,
+              content: Buffer.concat(pdfBuffer),
+            },
+          ],
+        });
+
+        console.log(`${email.messageId} has been sent.`);
+      })
+
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }
+};

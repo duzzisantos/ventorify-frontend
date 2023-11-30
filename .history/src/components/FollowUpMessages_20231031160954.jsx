@@ -1,0 +1,37 @@
+import { CheckCircle } from "react-bootstrap-icons";
+import PropTypes from "prop-types";
+import { customDateFormat, preferredLanguage } from "../utils/helpers";
+
+const FollowUpMessages = ({ emailhasReply, id, data }) => {
+  return (
+    <>
+      {emailhasReply && (
+        <div className="col-md-8 col-10 p-3 mt-3 mb-3 border-end border-secondary">
+          {data
+            .filter(
+              (element) =>
+                element._id === id &&
+                Object.values(element?.reply).length &&
+                element?.reply?.replyBody !== ""
+            )
+            .map((item) => (
+              <p className="lh-sm">{item.reply.replyBody}</p>
+            ))}
+          <small>
+            Received:{" "}
+            {customDateFormat(data.createdAt, preferredLanguage, "UTC")}{" "}
+            <CheckCircle />
+          </small>
+        </div>
+      )}
+    </>
+  );
+};
+
+FollowUpMessages.propTypes = {
+  emailhasReply: PropTypes.bool,
+  id: PropTypes.string,
+  data: PropTypes.arrayOf([PropTypes.object]),
+};
+
+export default FollowUpMessages;
