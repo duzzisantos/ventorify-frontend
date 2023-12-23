@@ -28,16 +28,15 @@ import EmployeePerformance from "./pages/EmployeePerformance";
 import Signup from "./auth/Signup";
 import Orders from "./pages/Orders";
 import NotFound404 from "./pages/404";
-import { Alert } from "react-bootstrap";
 
 function App() {
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const { pathname } = window.location;
   const [showSideBar, setShowSidebar] = useState(false);
 
   return (
     <div className="col-lg-12 App">
-      {loading ? <Alert>Checking Authentication...</Alert> : <Navigation />}
+      {user && <Navigation />}
       <div
         className={`col-lg-12 bg-white h-100 d-flex flex-row major-wrapper pt-5`}
       >

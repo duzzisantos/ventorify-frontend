@@ -96,7 +96,7 @@ function Navigation() {
               <div className="ms-auto">
                 <Button
                   variant="transparent"
-                  className={`border border-secondary `}
+                  className={`border border-secondary text-dark`}
                   onClick={() => setShow(true)}
                 >
                   Profile
