@@ -4,11 +4,13 @@ import { CartFill, Download } from "react-bootstrap-icons";
 import SendOrderConfirmation from "./SendOrderForm";
 import { handleGeneratePDF } from "../utils/generatePDF";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import { generateRevenue } from "../utils/generateRevenue";
 import { getRemainingGoods } from "../utils/getRemainingGoods";
 import GeneratedOrders from "./tables/GeneratedOrders";
 
 const ShoppingBasket = ({
+  accessToken,
   getShelfData,
   selectedQuantity,
   customerId,
@@ -38,8 +40,9 @@ const ShoppingBasket = ({
     setQuantity({ ...quantity, [product]: Number(quantity) });
   };
 
+  const { isLocal, isProduction, localhost, webhost } = http;
+
   const handleSell = async (product) => {
-    console.log(product);
     const postObject = {
       quantitySold: quantity[product],
       customerId: customerId,
@@ -55,8 +58,15 @@ const ShoppingBasket = ({
 
     try {
       const res = await axios.put(
-        `http://localhost:4000/api/sales/${product}`,
-        postObject
+        isLocal
+          ? `${localhost}/api/sales/${product}`
+          : isProduction && `${webhost}/api/sales/${product}`,
+        postObject,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       const data = await res.data;
       return data;
@@ -69,7 +79,10 @@ const ShoppingBasket = ({
   const generateOrderSummary = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/api/sales?customerId=${customerId}`
+        isLocal
+          ? `${localhost}/api/sales?customerId=${customerId}`
+          : isProduction && `${webhost}/api/sales?customerId=${customerId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
 
       if (!response.status === 200) {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import OrdersTableBody from "../components/OrdersTableBody";
 import { PersonXFill } from "react-bootstrap-icons";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -8,16 +9,23 @@ import { auth } from "../auth/firebase";
 import PaymentModal from "../components/modals/PaymentModal";
 import EmptyContent from "../components/EmptyContent";
 
-const Orders = () => {
+const Orders = ({ accessToken }) => {
   const [user] = useAuthState(auth);
   const [data, setData] = useState([]);
   const [paymentSanctionedBy, setSactionedBy] = useState("");
   const [paymentConfirmationId, setPaymentId] = useState("");
   const [grabId, setGrabId] = useState("");
   const [show, setShow] = useState(false);
+
+  const { isLocal, isProduction, localhost, webhost } = http;
   const getData = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/customer-order");
+      const res = await axios.get(
+        isLocal
+          ? `${localhost}/api/customer-order`
+          : isProduction && `${webhost}/api/customer-order`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       if (res.status !== 200) {
         throw new Error(`${res.status}, ${res.statusText}`);
       } else {
@@ -30,7 +38,7 @@ const Orders = () => {
 
   useEffect(() => {
     getData();
-  }, []);
+  });
 
   const handleShowPaymentModal = (id) => {
     if (id) {
@@ -40,13 +48,19 @@ const Orders = () => {
 
   const handleConfirmPayment = (element, _id) => {
     axios
-      .put(`http://localhost:4000/api/customer-order/${_id}`, {
-        customerHasPaid:
-          (element.customerHasPaid && false) ||
-          (!element.customerHasPaid && true),
-        paymentConfirmationId,
-        paymentSanctionedBy,
-      })
+      .put(
+        isLocal
+          ? `${localhost}/api/customer-order/${_id}`
+          : isProduction && `${webhost}/api/customer-order/${_id}`,
+        {
+          customerHasPaid:
+            (element.customerHasPaid && false) ||
+            (!element.customerHasPaid && true),
+          paymentConfirmationId,
+          paymentSanctionedBy,
+        },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         console.log(res.status);
       })

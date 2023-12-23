@@ -1,5 +1,7 @@
 import { Button, Form } from "react-bootstrap";
 import axios from "axios";
+import { http } from "../api-calls/http";
+
 const SendOrderConfirmation = ({
   customerId,
   setCustomerId,
@@ -9,6 +11,7 @@ const SendOrderConfirmation = ({
   setCustomerOrderAsPDF,
   revenue,
   setRevenue,
+  accessToken,
 }) => {
   const handleGenerateBinaryText = () => {
     const [file] = document.querySelector("input[type=file]").files;
@@ -20,15 +23,29 @@ const SendOrderConfirmation = ({
       reader.readAsDataURL(file); //do not change - otherwise the flow breaks PDF (corrupts)
     }
   };
+
+  const { isLocal, isProduction, localhost, webhost } = http;
+
+  //Handles sales order confirmation by sending a PDF file to the customer as confirmation
   const sendConfirmation = () => {
     axios
-      .post("http://localhost:4000/api/customer-order", {
-        customerId,
-        customerName,
-        customerOrderAsPDF,
-        revenue,
-        customerHasPaid: false,
-      })
+      .post(
+        isLocal
+          ? `${localhost}/api/customer-order`
+          : isProduction && `${webhost}/api/customer-order`,
+        {
+          customerId,
+          customerName,
+          customerOrderAsPDF,
+          revenue,
+          customerHasPaid: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.statusText);
       })

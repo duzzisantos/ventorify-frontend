@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import {
   customDateFormat,
   customTimeFormat,
@@ -10,16 +11,22 @@ import EmptyContent from "../components/EmptyContent";
 import WarehouseLogs from "../components/tables/WarehouseLogs";
 import SalesLogs from "../components/tables/SalesLogs";
 import PurchasesLogs from "../components/tables/PurchasesLogs";
-const OperationLogs = () => {
+const OperationLogs = ({ accessToken }) => {
   const [activity, setActivity] = useState([]);
   const [warehouse, setWarehouse] = useState([]);
   const [purchases, setPurchases] = useState([]);
 
+  const { isLocal, isProduction, webhost, localhost } = http;
   //get sales data to generate operations report with
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/sales");
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/sales`
+            : isProduction && `${webhost}/api/sales`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
         const data = res.data;
         setActivity(data);
       } catch (err) {
@@ -27,7 +34,7 @@ const OperationLogs = () => {
       }
     };
     getData();
-  }, []);
+  }, [accessToken, isLocal, isProduction, localhost, webhost]);
 
   //REMEMBER TO BACKUP WAREHOUSE BEFORE TRANSFERRING TO SHELF
   //get warehouse data to generate operations report with
@@ -35,7 +42,10 @@ const OperationLogs = () => {
   const getWarehouse = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/backup/display-backup"
+        isLocal
+          ? `${localhost}/api/display-backup`
+          : isProduction && `${webhost}/api/display-backup`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       const data = res.data;
       setWarehouse(data);
@@ -46,13 +56,18 @@ const OperationLogs = () => {
 
   useEffect(() => {
     getWarehouse();
-  }, []);
+  });
 
   //get purchase report data to generate operations report with
   useEffect(() => {
     const getPurchases = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/reorder");
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/reorder`
+            : isProduction && `${webhost}/api/reorder`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
         const data = res.data;
         setPurchases(data);
       } catch (err) {
@@ -60,18 +75,28 @@ const OperationLogs = () => {
       }
     };
     getPurchases();
-  }, []);
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   const handleClearSalesTable = () => {
     axios
-      .delete("http://localhost:4000/api/sales")
+      .delete(
+        isLocal
+          ? `${localhost}/api/sales`
+          : isProduction && `${webhost}/api/sales`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => console.log(res.status))
       .catch((err) => console.error(err.message));
   };
 
   const handleDeleteLogs = () => {
     axios
-      .delete("http://localhost:4000/api/backup/delete")
+      .delete(
+        isLocal
+          ? `${localhost}/api/backup/delete`
+          : isProduction && `${webhost}/api/backup/delete`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => console.log(res.status))
       .catch((err) => console.error(err.message));
   };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/esm/Container";
 import { allProducts, product } from "../charts/mockdata";
 import { getProductEOQ } from "../utils/getProductEOQ";
+import { http } from "../api-calls/http";
 import {
   Tags,
   Diagram3Fill,
@@ -16,7 +17,7 @@ import {
 import axios from "axios";
 import { Alert } from "react-bootstrap";
 
-const CreateRecord = () => {
+const CreateRecord = ({ accessToken }) => {
   const [record, setRecord] = useState({
     officerName: "",
     category: "",
@@ -40,10 +41,18 @@ const CreateRecord = () => {
     <option key={item.id}>{item.category.toUpperCase()}</option>
   ));
 
+  const { isLocal, isProduction, localhost, webhost } = http;
+
   const handlePost = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:4000/api/warehouse", record)
+      .post(
+        isLocal
+          ? `${localhost}/api/warehouse`
+          : isProduction && `${webhost}/api/warehouse`,
+        record,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         console.log(res.status);
         setTimeout(() => {
@@ -58,7 +67,10 @@ const CreateRecord = () => {
   const handleTriggerWarehouseBackup = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/backup/initiate-backup"
+        isLocal
+          ? `${localhost}/api/initiate-backup`
+          : isProduction && `${webhost}/api/initiate-backup`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       console.log(res.statusText);
     } catch (err) {
@@ -68,7 +80,12 @@ const CreateRecord = () => {
 
   const getProductPrice = () => {
     axios
-      .get("http://localhost:4000/api/price-list")
+      .get(
+        isLocal
+          ? `${localhost}/api/price-list`
+          : isProduction && `${webhost}/api/price-list`,
+        { headers: { Authorization: `Bearer${accessToken}` } }
+      )
       .then((res) => {
         setProductPrices(res.data);
       })
@@ -77,7 +94,7 @@ const CreateRecord = () => {
 
   useEffect(() => {
     getProductPrice();
-  }, []);
+  });
 
   //function to render Economic order quantity dynamically when select value changes
   //This helps provide some control over EOQ input - to encourage consistent numbers per entry

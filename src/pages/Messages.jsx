@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { http } from "../api-calls/http";
 import Container from "react-bootstrap/esm/Container";
 import {
   Envelope,
@@ -9,7 +10,7 @@ import {
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-const Messages = () => {
+const Messages = ({ accessToken }) => {
   const [send, setSend] = useState({
     sender: "",
     recipient: "",
@@ -17,9 +18,16 @@ const Messages = () => {
     messageBody: "",
   });
 
+  const { isLocal, isProduction, localhost, webhost } = http;
   const handleSubmit = () => {
     axios
-      .post("http://localhost:4000/api/messages", send)
+      .post(
+        isLocal
+          ? `${localhost}/api/messages`
+          : isProduction && `${webhost}/api/messages`,
+        send,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         setSend(res.data);
       })

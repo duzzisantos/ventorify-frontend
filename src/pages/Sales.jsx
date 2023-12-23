@@ -1,22 +1,30 @@
 import React, { useState, useMemo } from "react";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import Container from "react-bootstrap/esm/Container";
 import SalesTrend from "../charts/SalesTrend";
 import SalesPerCategory from "../charts/SalesPerCategory";
 import TopSales from "../charts/TopSales";
 
-const Sales = () => {
+const Sales = ({ accessToken }) => {
   const [sales, setSales] = useState([]);
+
+  const { isLocal, isProduction, localhost, webhost } = http;
   useMemo(() => {
     axios
-      .get("http://localhost:4000/api/sales")
+      .get(
+        isLocal
+          ? `${localhost}/api/sales`
+          : isProduction && `${webhost}/api/sales`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((result) => {
         setSales(result.data);
       })
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [accessToken, isLocal, isProduction, webhost, localhost]);
 
   return (
     <Container className="col-md-10 mb-5 pb-5">

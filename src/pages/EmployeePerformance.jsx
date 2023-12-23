@@ -1,20 +1,26 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import { Container } from "react-bootstrap";
 import StaffPerformance from "../charts/components/StaffPerformance";
 import { getUniqueEmployees } from "../utils/getUniqueEmployees";
 import getEmployeeActivity from "../utils/getEmployeeActivity";
 
-const EmployeePerformance = () => {
+const EmployeePerformance = ({ accessToken }) => {
   const [warehouse, setWarehouse] = useState([]);
   const [hover, setHover] = useState(false);
 
-  //get warehouse data to generate operations report with
+  const { isLocal, isProduction, localhost, webhost } = http;
+
+  //Get warehouse data to generate operations report with
   useEffect(() => {
     const getWarehouse = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:4000/api/backup/display-backup"
+          isLocal
+            ? `${localhost}/api/backup/display-backup`
+            : isProduction && `${webhost}/api/backup/display-backup`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
         );
         const data = res.data;
         setWarehouse(data);
@@ -23,7 +29,7 @@ const EmployeePerformance = () => {
       }
     };
     getWarehouse();
-  }, []);
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   const getActivity = getEmployeeActivity(getUniqueEmployees, warehouse);
 

@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { allProducts, product } from "../charts/mockdata";
-
+import { http } from "../api-calls/http";
 import {
   Tags,
   Diagram3Fill,
   SendFill,
   CurrencyEuro,
 } from "react-bootstrap-icons";
-
 import axios from "axios";
 
-const Prices = () => {
+const Prices = ({ accessToken }) => {
   const [record, setRecord] = useState({
     product: "",
     category: "",
@@ -27,8 +26,19 @@ const Prices = () => {
   ));
 
   const handlePost = () => {
+    const { isLocal, isProduction, localhost, webhost } = http;
     axios
-      .post("http://localhost:4000/api/price-list", record)
+      .post(
+        isLocal
+          ? `${localhost}/api/price-list`
+          : isProduction && `${webhost}/api/price-list`,
+        record,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
       })

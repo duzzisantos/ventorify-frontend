@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
+import { http } from "../api-calls/http";
 import {
   Activity,
   EnvelopeCheckFill,
@@ -13,12 +14,18 @@ import {
 } from "react-bootstrap-icons";
 import axios from "axios";
 
-const SideBar = ({ showSideBar, setShowSidebar }) => {
+const SideBar = ({ showSideBar, setShowSidebar, accessToken }) => {
   const [count, setCount] = useState([]);
 
+  const { isLocal, isProduction, localhost, webhost } = http;
   const getData = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/messages");
+      const res = await axios.get(
+        isLocal
+          ? `${localhost}/api/messages`
+          : isProduction && `${webhost}/api/messages`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       setCount(res.data);
     } catch (err) {
       console.log(err.message);
@@ -27,7 +34,7 @@ const SideBar = ({ showSideBar, setShowSidebar }) => {
 
   useEffect(() => {
     getData();
-  }, []);
+  });
 
   return (
     <div className="position-absolute mt-5 py-2 col-1">

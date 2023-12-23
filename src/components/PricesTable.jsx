@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-
+import { http } from "../api-calls/http";
 import PriceEditModal from "./PriceEditModal";
 import PriceTableBody from "./PriceTablebody";
 import EmptyContent from "./EmptyContent";
 
-const PriceTable = () => {
+const PriceTable = ({ accessToken }) => {
   const [price, setPrice] = useState([]);
   const [show, setShow] = useState(false);
   const [grabId, setGrabId] = useState("");
@@ -14,9 +14,20 @@ const PriceTable = () => {
   const [category, setCategoryEdit] = useState("");
   const [unitPrice, setUnitPriceEdit] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { isLocal, isProduction, localhost, webhost } = http;
   const getPrices = () => {
     axios
-      .get("http://localhost:4000/api/price-list")
+      .get(
+        isLocal
+          ? `${localhost}/api/price-list`
+          : isProduction && `${webhost}/api/price-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         setPrice(res.data);
         setIsLoading(false);
@@ -29,11 +40,15 @@ const PriceTable = () => {
   useEffect(() => {
     getPrices();
     handleDelete();
-  }, []);
+  });
 
   const handleDelete = (_id) => {
     axios
-      .delete(`http://localhost:4000/api/price-list/${_id}`)
+      .delete(
+        isLocal
+          ? `${localhost}/api/price-list/${_id}`
+          : isProduction && `${webhost}/api/price-list/${_id}`
+      )
       .then((res) => {
         console.log(res.statusText);
       })
@@ -50,7 +65,9 @@ const PriceTable = () => {
   const handleUpdatePrice = async (_id) => {
     try {
       const response = await axios.put(
-        `http://localhost:4000/api/price-list/${_id}`,
+        isLocal
+          ? `${localhost}/api/price-list/${_id}`
+          : isProduction && `${webhost}/api/price-list/${_id}`,
         {
           product,
           category,

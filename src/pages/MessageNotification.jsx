@@ -1,19 +1,24 @@
 import axios from "axios";
+import { http } from "../api-calls/http";
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import MessageToggler from "../components/MessageToggler";
 
-const Notifications = ({ ref, notificationClass }) => {
+const Notifications = ({ ref, notificationClass, accessToken }) => {
   const [message, setMessage] = useState([]);
 
+  const { isLocal, isProduction, localhost, webhost } = http;
   const handleSeenMessage = async (_id) => {
     const isSeen = {
       seen: true,
     };
     try {
       const res = await axios.put(
-        `http://localhost:4000/api/messages/${_id}`,
-        isSeen
+        isLocal
+          ? `${localhost}/api/messages/${_id}`
+          : isProduction && `${webhost}/api/messages/${_id}`,
+        isSeen,
+        { headers: { Authorization: `Bearer${accessToken}` } }
       );
       console.log(res.status);
     } catch (err) {
@@ -22,7 +27,12 @@ const Notifications = ({ ref, notificationClass }) => {
   };
   const handleDisplayMessages = () => {
     axios
-      .get(`http://localhost:4000/api/messages`)
+      .get(
+        isLocal
+          ? `${localhost}/api/messages`
+          : isProduction && `${webhost}/api/messages`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         setMessage(res.data);
       })
@@ -33,7 +43,12 @@ const Notifications = ({ ref, notificationClass }) => {
 
   const handleDeleteMessage = (_id) => {
     axios
-      .delete(`http://localhost:4000/api/messages/${_id}`)
+      .delete(
+        isLocal
+          ? `${localhost}/api/messages/${_id}`
+          : isProduction && `${webhost}/api/messages/${_id}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         console.log(res.status);
       })
@@ -44,7 +59,7 @@ const Notifications = ({ ref, notificationClass }) => {
 
   useEffect(() => {
     handleDisplayMessages();
-  }, []);
+  });
 
   return (
     <Container className="col-md-10 text-secondary">

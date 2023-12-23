@@ -1,4 +1,5 @@
 import axios from "axios";
+import { http } from "../api-calls/http";
 import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import {
@@ -7,20 +8,27 @@ import {
   PersonBadge,
   ShieldLock,
 } from "react-bootstrap-icons";
-const Team = () => {
+const Team = ({ accessToken }) => {
   const [team, setTeam] = useState([]);
 
+  const { isLocal, isProduction, webhost, localhost } = http;
   useEffect(() => {
     const getTeamData = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/team");
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/team`
+            : isProduction && `${webhost}/api/team`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
         setTeam(res.data);
       } catch (error) {
         console.log(error.message);
       }
     };
     getTeamData();
-  }, []);
+  }, [accessToken, isLocal, isProduction, webhost, localhost]);
+
   return (
     <Container className="col-md-10 text-secondary">
       <div className="my-5 mb-0 text-start mx-3">

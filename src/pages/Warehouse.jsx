@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import Container from "react-bootstrap/esm/Container";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -7,17 +8,22 @@ import { Modal } from "react-bootstrap";
 import WarehouseShelf from "../charts/components/WarehouseShelf";
 import EmptyContent from "../components/EmptyContent";
 
-const WareHouse = () => {
+const WareHouse = ({ accessToken }) => {
   const [suggestion, setSuggestion] = useState([]);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const { isLocal, isProduction, webhost, localhost } = http;
   useEffect(() => {
     const getData = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:4000/api/aggregate-goods"
+          isLocal
+            ? `${localhost}/api/aggregate-goods`
+            : isProduction && `${webhost}/api/aggregate-goods`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
         );
         const data = res.data;
         setSuggestion(data);
@@ -26,11 +32,16 @@ const WareHouse = () => {
       }
     };
     getData();
-  }, []);
+  }, [accessToken, isLocal, isProduction, webhost, localhost]);
 
   const handleReorder = async (_id) => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/reorder/${_id}`);
+      const res = await axios.get(
+        isLocal
+          ? `${localhost}/api/reorder/${_id}`
+          : isProduction && `${webhost}/api/reorder/${_id}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       console.log(res.data.message);
     } catch (err) {
       console.error(err.message);
@@ -40,7 +51,12 @@ const WareHouse = () => {
   //deletes all warehouse data. Danger!!!
   const handleClearWareHouse = () => {
     axios
-      .delete("http://localhost:4000/api/warehouse")
+      .delete(
+        isLocal
+          ? `${localhost}/api/warehouse`
+          : isProduction && `${webhost}/api/warehouse`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         console.log(res.statusText);
       })

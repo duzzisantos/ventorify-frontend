@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Container, Button, Modal } from "react-bootstrap";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import ShelfBody from "../charts/components/ShelfBody";
 import SalesTable from "../components/SalesTable";
 import EmptyContent from "../components/EmptyContent";
@@ -8,7 +9,7 @@ import ShoppingBasket from "../components/ShoppingBasket";
 import { Plus } from "react-bootstrap-icons";
 import TransferToShelf from "../components/tables/TransferToShelf";
 
-const Shelf = () => {
+const Shelf = ({ accessToken }) => {
   const [goods, setGoods] = useState([]);
   const [warehouse, setWarehouse] = useState([]);
   const [showCart, setShowCart] = useState(false);
@@ -21,9 +22,15 @@ const Shelf = () => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [selectedQuantity, setSelectedQuantity] = useState(0);
 
+  const { isLocal, isProduction, localhost, webhost } = http;
   const getWarehouseData = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/aggregate-goods");
+      const res = await axios.get(
+        isLocal
+          ? `${localhost}/api/aggregate-goods`
+          : isProduction && `${webhost}/api/aggregate-goods`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       setWarehouse(res.data);
     } catch (err) {
       console.error(err);
@@ -33,7 +40,10 @@ const Shelf = () => {
   const getAggregateShelfData = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/aggregate-shelf-items"
+        isLocal
+          ? `${localhost}/api/aggregate-shelf-items`
+          : isProduction && `${webhost}/api/aggregate-shelf-items`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       const data = res.data;
       setGoods(data);
@@ -45,13 +55,16 @@ const Shelf = () => {
   useEffect(() => {
     getWarehouseData();
     getAggregateShelfData();
-  }, []);
+  });
 
   //Here we update the model's properties. Initially, no inventory has left warehouse.
   const handleTransferToShelf = async (id) => {
     try {
       const res = await axios.post(
-        `http://localhost:4000/api/aggregate-goods/${id}`
+        isLocal
+          ? `${localhost}/api/aggregate-goods/${id}`
+          : isProduction && `${webhost}/api/aggregate-goods/${id}`,
+        { headers: { Authorization: `Bearer${accessToken}` } }
       );
       console.log(res.data.message);
     } catch (err) {
@@ -64,7 +77,7 @@ const Shelf = () => {
   //dangerous api calls
   const handleClearShelf = () => {
     axios
-      .delete("http://localhost:4000/api/aggregate-shelf-items")
+      .delete()
       .then(() => {
         console.log("Successfully cleared shelf");
       })
@@ -76,7 +89,12 @@ const Shelf = () => {
   // dangerous api calls
   const handleClearAggregateWarehouse = () => {
     axios
-      .delete("http://localhost:4000/api/warehouse")
+      .delete(
+        isLocal
+          ? `${localhost}/api/warehouse`
+          : isProduction && `${webhost}/api/warehouse`,
+        { headers: { Authorization: `Bearer${accessToken}` } }
+      )
       .then(() => {
         console.log("Deleted aggregate goods");
       })

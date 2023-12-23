@@ -1,8 +1,12 @@
 import axios from "axios";
 
-const sendConfirmation = (postObject) => {
+const sendConfirmation = (postObject, accessToken) => {
   axios
-    .post("http://localhost:4000/api/customer-order", postObject)
+    .post("http://localhost:4000/api/customer-order", postObject, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((res) => {
       console.log(res.statusText);
     })

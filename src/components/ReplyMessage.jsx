@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
+import { http } from "../api-calls/http";
 
 import axios from "axios";
 const ReplyMessage = ({
@@ -14,8 +15,11 @@ const ReplyMessage = ({
   replyBody,
   show,
   setShow,
+  accessToken,
 }) => {
   const [reply, setReply] = useState("");
+
+  const { isLocal, isProduction, localhost, webhost } = http;
   //Handle submitting reply
   const handleSubmitReply = (id, e) => {
     e.preventDefault();
@@ -27,7 +31,17 @@ const ReplyMessage = ({
       },
     };
     axios
-      .put(`http://localhost:4000/api/messages/${id}`, replyMessageObject)
+      .put(
+        isLocal
+          ? `${localhost}/api/messages/${id}`
+          : isProduction && `${webhost}/api/messages/${id}`,
+        replyMessageObject,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then((res) => {
         if (res.status === "OK") {
           setData(res.data);

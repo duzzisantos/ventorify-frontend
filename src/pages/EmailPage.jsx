@@ -3,6 +3,7 @@ import { Button, Container } from "react-bootstrap";
 import ReplyMessage from "../components/ReplyMessage";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { http } from "../api-calls/http";
 import {
   CheckCircleFill,
   EnvelopeOpenFill,
@@ -11,7 +12,7 @@ import {
 } from "react-bootstrap-icons";
 import { customDateFormat, preferredLanguage } from "../utils/helpers";
 // import FollowUpMessages from "../components/FollowUpMessages";
-const EmailPage = () => {
+const EmailPage = ({ accessToken }) => {
   //These cater for obtaining request parameters and navigation mechanism with which data can be passed between two routes
   const { id } = useParams();
   let navigate = useNavigate();
@@ -19,9 +20,15 @@ const EmailPage = () => {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
 
+  const { isLocal, isProduction, localhost, webhost } = http;
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/messages/?_id=${id}`)
+      .get(
+        isLocal
+          ? `${localhost}/api/messages_id=${id}`
+          : isProduction && `${webhost}/api/messages_id=${id}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         setData(res.data);
       })
@@ -31,7 +38,7 @@ const EmailPage = () => {
           console.log("Promise failed");
         }
       });
-  }, [id]);
+  }, [id, isLocal, isProduction, localhost, webhost, accessToken]);
 
   //Handle go back to inbox
   const handleGoBack = () => {
