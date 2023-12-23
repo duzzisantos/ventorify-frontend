@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const PaymentModal = ({
   _id,
+  element,
   show,
   handleClose,
   handleConfirmation,
@@ -11,6 +13,12 @@ const PaymentModal = ({
   setSanctionedBy,
   user,
 }) => {
+  useEffect(() => {
+    const filteredCustomer = element.filter((el) => _id.includes(el._id));
+    setPaymentId(filteredCustomer[0]?.paymentConfirmationId);
+    setSanctionedBy(filteredCustomer[0]?.paymentSanctionedBy);
+  }, [_id, element, setPaymentId, setSanctionedBy]);
+
   return (
     <Modal
       show={show}
@@ -32,7 +40,7 @@ const PaymentModal = ({
             id="sanctioned-by"
             name={"paymentSanctionedBy"}
             value={paymentSanctionedBy}
-            onChange={() => setSanctionedBy(user)}
+            onChange={(e) => setSanctionedBy(e.target.value)}
           />
 
           <Form.Label htmlFor="payment-id">Payment Confirmation ID:</Form.Label>

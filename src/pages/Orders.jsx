@@ -119,6 +119,7 @@ const Orders = () => {
         {show && (
           <PaymentModal
             _id={grabId}
+            element={data}
             show={show}
             handleClose={() => setShow(false)}
             handleConfirmation={() => handleConfirmPayment(data, grabId)}

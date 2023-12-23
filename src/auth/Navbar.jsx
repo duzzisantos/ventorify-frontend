@@ -42,7 +42,12 @@ function Navigation() {
 
   return (
     <>
-      <Navbar expand="lg" className="col-md-12 mt-0 shadow-sm" fixed="top">
+      <Navbar
+        expand="lg"
+        className="col-md-12 mt-0 shadow-sm bg-light"
+        fixed="top"
+        style={{ zIndex: 1 }}
+      >
         <Container fluid>
           <Navbar.Brand className="fs-3 pt-0">
             <Link to={"/home"} className="text-decoration-none text-success">
