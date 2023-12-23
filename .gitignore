@@ -23,5 +23,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-config.js
 connect.js
+
+ide-settings.jsonc
+.history/src/auth/config_20231103140259.js
+.history/src/auth/config_20231103140509.js
