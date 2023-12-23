@@ -114,11 +114,15 @@ const PriceTable = () => {
       {show && (
         <PriceEditModal
           show={show}
+          priceData={price}
           setShow={setShow}
           _id={grabId}
           product={product}
           unitPrice={unitPrice}
           category={category}
+          setCategory={setCategoryEdit}
+          setProduct={setProductEdit}
+          setUnitPrice={setUnitPriceEdit}
           handleClose={handleClose}
           handleEditCategory={handleEditCategory}
           handleEditProduct={handleEditProduct}

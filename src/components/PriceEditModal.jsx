@@ -1,18 +1,31 @@
+import { useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Tags, Diagram3Fill, CurrencyEuro } from "react-bootstrap-icons";
 
 const PriceEditModal = ({
   show,
   _id,
+  priceData,
   product,
   category,
   unitPrice,
+  setProduct,
+  setCategory,
+  setUnitPrice,
   handleUpdatePrice,
   handleEditCategory,
   handleEditProduct,
   handleClose,
   handleEditUnitPrice,
 }) => {
+  //Persists price data to be updated upon the form inputs
+  useEffect(() => {
+    const foundData = priceData.filter((element) => element._id === _id);
+    setCategory(foundData[0]?.category);
+    setUnitPrice(foundData[0]?.unitPrice);
+    setProduct(foundData[0]?.product);
+  }, [priceData, _id, setCategory, setProduct, setUnitPrice]);
+
   return (
     <Modal
       backdrop="static"
@@ -22,7 +35,7 @@ const PriceEditModal = ({
       show={show}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Edit Price for #{_id}</Modal.Title>
+        <Modal.Title>Editing price for {product}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="d-flex flex-column">
         <Form>

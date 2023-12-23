@@ -12,6 +12,6 @@ const EmptyContent = () => {
       </span>
     </div>
   );
-};
+}
 
 export default EmptyContent;
