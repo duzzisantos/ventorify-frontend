@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./auth/firebase";
@@ -28,45 +28,21 @@ import EmployeePerformance from "./pages/EmployeePerformance";
 import Signup from "./auth/Signup";
 import Orders from "./pages/Orders";
 import NotFound404 from "./pages/404";
+import { Alert } from "react-bootstrap";
 
 function App() {
-  const [theme, setTheme] = useState(false);
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const { pathname } = window.location;
-
-  const ref = useRef();
-  const documentRef = ref.current;
-  const navbarRef = ref.current;
-  const sidebarRef = ref.current;
-  const footerRef = ref.current;
-  const handleDarkMode = () => {
-    setTheme(!theme);
-  };
+  const [showSideBar, setShowSidebar] = useState(false);
 
   return (
     <div className="col-lg-12 App">
-      {user && (
-        <Navigation
-          onChange={handleDarkMode}
-          ref={navbarRef}
-          bg={theme ? "dark" : "light"}
-        />
-      )}
-
+      {loading ? <Alert>Checking Authentication...</Alert> : <Navigation />}
       <div
-        ref={documentRef}
-        className={`col-lg-12 ${
-          theme ? "bg-black swap-color" : "bg-white"
-        } h-100 d-flex flex-row major-wrapper pt-5`}
+        className={`col-lg-12 bg-white h-100 d-flex flex-row major-wrapper pt-5`}
       >
         {user && (
-          <SideBar
-            className={`col-md-1 ${
-              theme ? "bg-black" : "bg-white"
-            } shadow-sm vh-100 mt-4 pt-5 rounded-0`}
-            ref={sidebarRef}
-            id={"side-bar"}
-          />
+          <SideBar showSideBar={showSideBar} setShowSidebar={setShowSidebar} />
         )}
 
         <main className="col-12">
@@ -119,14 +95,7 @@ function App() {
         </main>
       </div>
 
-      {user && (
-        <Footer
-          ref={footerRef}
-          className={`w-100 ${
-            theme ? "bg-dark" : "bg-light"
-          } shadow-sm footer-font d-flex flex-row flex-wrap gap-3 py-3 justify-content-end text-secondary`}
-        />
-      )}
+      {user && <Footer />}
     </div>
   );
 }

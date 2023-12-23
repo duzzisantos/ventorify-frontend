@@ -5,17 +5,14 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { db, auth, logout } from "./firebase";
 import { query, collection, getDocs, where } from "firebase/firestore";
 import {
-  MoonFill,
-  SunFill,
   TreeFill,
   PersonFill,
   EnvelopeCheckFill,
   ShieldLockFill,
   Power,
 } from "react-bootstrap-icons";
-import { FormCheck } from "react-bootstrap";
 
-function Navigation({ onChange, ref, bg }) {
+function Navigation() {
   const [show, setShow] = useState(false);
   const [user, loading] = useAuthState(auth);
   const [name, setName] = useState("");
@@ -45,13 +42,7 @@ function Navigation({ onChange, ref, bg }) {
 
   return (
     <>
-      <Navbar
-        ref={ref}
-        bg={bg}
-        expand="lg"
-        className="col-md-12 mt-0 shadow-sm"
-        fixed="top"
-      >
+      <Navbar expand="lg" className="col-md-12 mt-0 shadow-sm" fixed="top">
         <Container fluid>
           <Navbar.Brand className="fs-3 pt-0">
             <Link to={"/home"} className="text-decoration-none text-success">
@@ -96,21 +87,11 @@ function Navigation({ onChange, ref, bg }) {
               >
                 Prices
               </NavLink>
-              <div className="d-flex flex-row hstack gap-2 mx-5 fs-5">
-                <SunFill className="text-secondary" />
-                <FormCheck
-                  type="switch"
-                  aria-label="Toggle dark mode"
-                  onChange={onChange}
-                />
-                <MoonFill className="text-secondary" />
-              </div>
+
               <div className="ms-auto">
                 <Button
                   variant="transparent"
-                  className={`border border-secondary ${
-                    bg === "dark" ? "text-light" : "text-dark"
-                  }`}
+                  className={`border border-secondary `}
                   onClick={() => setShow(true)}
                 >
                   Profile
@@ -129,16 +110,11 @@ function Navigation({ onChange, ref, bg }) {
           backdrop="static"
           style={{ marginLeft: "40%", marginTop: "2.5%" }}
         >
-          <Modal.Header
-            closeButton
-            className={`${bg === "dark" && "bg-dark text-light"}`}
-          >
+          <Modal.Header closeButton>
             <Modal.Title>Profile</Modal.Title>
           </Modal.Header>
           <Modal.Body
-            className={`d-flex flex-column px-4 py-4 lh-lg ${
-              bg === "dark" && "bg-dark text-light"
-            }`}
+            className={`d-flex flex-column px-4 py-4 lh-lg `}
             style={{ fontSize: "14px" }}
           >
             {user.displayName && (

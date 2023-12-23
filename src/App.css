@@ -107,6 +107,16 @@ input {
   }
 }
 
+@media screen and (max-width: 500px) {
+  #side-bar {
+    width: 60px !important;
+  }
+
+  .hide-name {
+    display: none;
+  }
+}
+
 /* Login */
 .login-p,
 .footer-font {

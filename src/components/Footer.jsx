@@ -1,8 +1,10 @@
 import React from "react";
 
-const Footer = ({ ref, className }) => {
+const Footer = () => {
   return (
-    <footer ref={ref} className={className}>
+    <footer
+      className={`w-100 bg-light shadow-sm footer-font d-flex flex-row flex-wrap gap-3 py-3 justify-content-end text-secondary`}
+    >
       <div className="p-2 hstack gap-5">
         <a href="https://google.com" target="_blank" rel="noreferrer noopener">
           Partners
