@@ -71,6 +71,11 @@ const PriceTable = ({ accessToken }) => {
           product,
           category,
           unitPrice,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
       if (!response.status === 200) {
