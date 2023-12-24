@@ -32,7 +32,7 @@ const SalesPerCategory = ({ chart }) => {
     },
   };
 
-  const labels = [...new Set(chart.map((item) => item.category))];
+  const labels = [...new Set(chart?.map((item) => item.category))];
   const revenue = labels.map((category) => {
     const filteredRevenue = chart
       .filter((item) => item.category === category)

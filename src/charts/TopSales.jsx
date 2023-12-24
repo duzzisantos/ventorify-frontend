@@ -37,12 +37,12 @@ const TopSales = ({ chart }) => {
 
   //use unique product names to filter out and evaluate total revenue per product => return as object with unique products and revenue
   const topSoldProducts = topSalesLabel
-    .map((product) => {
+    ?.map((product) => {
       const filteredItems = chart
-        .filter((item) => item.product === product)
-        .map((p) => p);
+        ?.filter((item) => item.product === product)
+        ?.map((p) => p);
       const totalRevenue = filteredItems
-        .map((item) => item.salesOperations.revenue)
+        ?.map((item) => item.salesOperations?.revenue)
         .reduce((a, b) => a + b, 0);
       return { product, totalRevenue };
     })

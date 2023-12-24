@@ -48,21 +48,21 @@ const SalesTrend = ({ chart }) => {
   ];
 
   const revenue = labels
-    .map((month) => {
+    ?.map((month) => {
       const filteredRevenue = chart
-        .filter(
+        ?.filter(
           (item) =>
             extractMonth(item.createdAt, preferredLanguage, "UTC") === month
         )
-        .map((x) => x);
+        ?.map((x) => x);
 
       const totalMonthlyRevenue = filteredRevenue
-        .map((item) => item.salesOperations.revenue)
-        .reduce((a, b) => a + b, 0);
+        ?.map((item) => item.salesOperations.revenue)
+        ?.reduce((a, b) => a + b, 0);
 
       return { month, totalMonthlyRevenue };
     })
-    .map((sales) => sales.totalMonthlyRevenue);
+    ?.map((sales) => sales.totalMonthlyRevenue);
 
   const data = {
     labels,

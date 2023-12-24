@@ -116,7 +116,7 @@ const PriceTable = ({ accessToken }) => {
             </tr>
           </thead>
           <tbody>
-            {price.map((element) => (
+            {price?.map((element) => (
               <PriceTableBody
                 key={element._id}
                 element={element}
