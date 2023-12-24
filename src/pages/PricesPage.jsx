@@ -2,7 +2,7 @@ import Container from "react-bootstrap/esm/Container";
 import Prices from "../components/Prices";
 import PriceTable from "../components/PricesTable";
 
-const PricesPage = () => {
+const PricesPage = ({ accessToken }) => {
   return (
     <Container className="col-md-10 text-secondary my-5 pb-5">
       <div className="text-start mx-3">
@@ -10,8 +10,8 @@ const PricesPage = () => {
         <p>Manage price information according to pricing policy.</p>
       </div>
       <hr />
-      <Prices />
-      <PriceTable />
+      <Prices accessToken={accessToken} />
+      <PriceTable accessToken={accessToken} />
     </Container>
   );
 };

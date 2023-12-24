@@ -25,21 +25,6 @@ const Notifications = ({ ref, notificationClass, accessToken }) => {
       console.error(err.message);
     }
   };
-  const handleDisplayMessages = () => {
-    axios
-      .get(
-        isLocal
-          ? `${localhost}/api/messages`
-          : isProduction && `${webhost}/api/messages`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      )
-      .then((res) => {
-        setMessage(res.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
 
   const handleDeleteMessage = (_id) => {
     axios
@@ -58,8 +43,23 @@ const Notifications = ({ ref, notificationClass, accessToken }) => {
   };
 
   useEffect(() => {
-    handleDisplayMessages();
-  });
+    const getDisplayMessages = () => {
+      axios
+        .get(
+          isLocal
+            ? `${localhost}/api/messages`
+            : isProduction && `${webhost}/api/messages`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        )
+        .then((res) => {
+          setMessage(res.data);
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    };
+    getDisplayMessages();
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   return (
     <Container className="col-md-10 text-secondary">

@@ -269,6 +269,7 @@ const ShoppingBasket = ({
           <section className="shadow-sm p-2 rounded-2 card-body">
             <h6 className="fw-bold ">Confirm order</h6>
             <SendOrderConfirmation
+              accessToken={accessToken}
               customerName={customerName}
               customerId={customerId}
               setCustomerId={setCustomerId}

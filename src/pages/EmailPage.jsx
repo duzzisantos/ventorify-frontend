@@ -99,6 +99,7 @@ const EmailPage = ({ accessToken }) => {
             </div>
             {show && (
               <ReplyMessage
+                accessToken={accessToken}
                 id={id}
                 recipient={data.sender}
                 sender={data.recipient}

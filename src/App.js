@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./auth/firebase";
@@ -33,6 +33,11 @@ function App() {
   const [user] = useAuthState(auth);
   const { pathname } = window.location;
   const [showSideBar, setShowSidebar] = useState(false);
+  const [accessToken, setAccessToken] = useState("");
+
+  useEffect(() => {
+    user && user.getIdToken().then((token) => setAccessToken(token));
+  }, [user]);
 
   return (
     <div className="col-lg-12 App">
@@ -41,7 +46,11 @@ function App() {
         className={`col-lg-12 bg-white h-100 d-flex flex-row major-wrapper pt-5`}
       >
         {user && (
-          <SideBar showSideBar={showSideBar} setShowSidebar={setShowSidebar} />
+          <SideBar
+            showSideBar={showSideBar}
+            setShowSidebar={setShowSidebar}
+            accessToken={accessToken}
+          />
         )}
 
         <main className="col-12">
@@ -62,29 +71,58 @@ function App() {
                     <Route path="*" element={<NotFound404 user={user} />} />
                     <Route path="/" element={<LandingPage />} />
                     <Route path="home" element={<LandingPage />} />
-                    <Route path="warehouse" element={<WareHouse />} />
-                    <Route path="shelf" element={<Shelf />} />
-                    <Route path="sales" element={<Sales />} />
-                    <Route path="create" element={<CreateRecord />} />
+                    <Route
+                      path="warehouse"
+                      element={<WareHouse accessToken={accessToken} />}
+                    />
+                    <Route
+                      path="shelf"
+                      element={<Shelf accessToken={accessToken} />}
+                    />
+                    <Route
+                      path="sales"
+                      element={<Sales accessToken={accessToken} />}
+                    />
+                    <Route
+                      path="create"
+                      element={<CreateRecord accessToken={accessToken} />}
+                    />
                     <Route path="profile" element={<Profile />} />
-                    <Route path="messages" element={<Messages />} />
+                    <Route
+                      path="messages"
+                      element={<Messages accessToken={accessToken} />}
+                    />
                     <Route path="purchase" element={<Purchase />} />
                     <Route path="settings" element={<ApplicationSettings />} />
-                    <Route path="operations" element={<OperationLogs />} />
-                    <Route path="team" element={<Team />} />
-                    <Route path="prices" element={<PricesPage />} />
-                    <Route path="orders" element={<Orders />} />
+                    <Route
+                      path="operations"
+                      element={<OperationLogs accessToken={accessToken} />}
+                    />
+                    <Route
+                      path="team"
+                      element={<Team accessToken={accessToken} />}
+                    />
+                    <Route
+                      path="prices"
+                      element={<PricesPage accessToken={accessToken} />}
+                    />
+                    <Route
+                      path="orders"
+                      element={<Orders accessToken={accessToken} />}
+                    />
                     <Route
                       path="employee-performance"
-                      element={<EmployeePerformance />}
+                      element={
+                        <EmployeePerformance accessToken={accessToken} />
+                      }
                     />
                     <Route
                       path="message-notification/*"
-                      element={<Notifications />}
+                      element={<Notifications accessToken={accessToken} />}
                     />
                     <Route
                       path="navbar/message-notification/email-details/:id"
-                      element={<EmailPage />}
+                      element={<EmailPage accessToken={accessToken} />}
                     />
                   </>
                 )

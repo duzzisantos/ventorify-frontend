@@ -16,31 +16,30 @@ const PriceTable = ({ accessToken }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { isLocal, isProduction, localhost, webhost } = http;
-  const getPrices = () => {
-    axios
-      .get(
-        isLocal
-          ? `${localhost}/api/price-list`
-          : isProduction && `${webhost}/api/price-list`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
-      .then((res) => {
-        setPrice(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
 
   useEffect(() => {
+    const getPrices = () => {
+      axios
+        .get(
+          isLocal
+            ? `${localhost}/api/price-list`
+            : isProduction && `${webhost}/api/price-list`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        .then((res) => {
+          setPrice(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
     getPrices();
-    handleDelete();
-  });
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   const handleDelete = (_id) => {
     axios

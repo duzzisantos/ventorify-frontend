@@ -18,23 +18,22 @@ const SideBar = ({ showSideBar, setShowSidebar, accessToken }) => {
   const [count, setCount] = useState([]);
 
   const { isLocal, isProduction, localhost, webhost } = http;
-  const getData = async () => {
-    try {
-      const res = await axios.get(
-        isLocal
-          ? `${localhost}/api/messages`
-          : isProduction && `${webhost}/api/messages`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      setCount(res.data);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
-
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/messages`
+            : isProduction && `${webhost}/api/messages`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        setCount(res.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
     getData();
-  });
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   return (
     <div className="position-absolute mt-5 py-2 col-1">

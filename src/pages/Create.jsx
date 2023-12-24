@@ -78,23 +78,22 @@ const CreateRecord = ({ accessToken }) => {
     }
   };
 
-  const getProductPrice = () => {
-    axios
-      .get(
-        isLocal
-          ? `${localhost}/api/price-list`
-          : isProduction && `${webhost}/api/price-list`,
-        { headers: { Authorization: `Bearer${accessToken}` } }
-      )
-      .then((res) => {
-        setProductPrices(res.data);
-      })
-      .catch((err) => console.error(err));
-  };
-
   useEffect(() => {
+    const getProductPrice = () => {
+      axios
+        .get(
+          isLocal
+            ? `${localhost}/api/price-list`
+            : isProduction && `${webhost}/api/price-list`,
+          { headers: { Authorization: `Bearer${accessToken}` } }
+        )
+        .then((res) => {
+          setProductPrices(res.data);
+        })
+        .catch((err) => console.error(err));
+    };
     getProductPrice();
-  });
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   //function to render Economic order quantity dynamically when select value changes
   //This helps provide some control over EOQ input - to encourage consistent numbers per entry

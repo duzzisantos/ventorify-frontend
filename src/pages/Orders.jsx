@@ -18,27 +18,27 @@ const Orders = ({ accessToken }) => {
   const [show, setShow] = useState(false);
 
   const { isLocal, isProduction, localhost, webhost } = http;
-  const getData = async () => {
-    try {
-      const res = await axios.get(
-        isLocal
-          ? `${localhost}/api/customer-order`
-          : isProduction && `${webhost}/api/customer-order`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      if (res.status !== 200) {
-        throw new Error(`${res.status}, ${res.statusText}`);
-      } else {
-        setData(res.data);
-      }
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
 
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/customer-order`
+            : isProduction && `${webhost}/api/customer-order`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        if (res.status !== 200) {
+          throw new Error(`${res.status}, ${res.statusText}`);
+        } else {
+          setData(res.data);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
     getData();
-  });
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   const handleShowPaymentModal = (id) => {
     if (id) {
@@ -65,7 +65,6 @@ const Orders = ({ accessToken }) => {
         console.log(res.status);
       })
       .catch((err) => console.warn(err));
-    getData();
   };
 
   const commonClasses =

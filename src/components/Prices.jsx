@@ -25,7 +25,8 @@ const Prices = ({ accessToken }) => {
     <option key={item.id}>{item.category.toUpperCase()}</option>
   ));
 
-  const handlePost = () => {
+  const handlePost = (e) => {
+    e.preventDefault();
     const { isLocal, isProduction, localhost, webhost } = http;
     axios
       .post(

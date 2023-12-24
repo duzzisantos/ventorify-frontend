@@ -23,39 +23,42 @@ const Shelf = ({ accessToken }) => {
   const [selectedQuantity, setSelectedQuantity] = useState(0);
 
   const { isLocal, isProduction, localhost, webhost } = http;
-  const getWarehouseData = async () => {
-    try {
-      const res = await axios.get(
-        isLocal
-          ? `${localhost}/api/aggregate-goods`
-          : isProduction && `${webhost}/api/aggregate-goods`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      setWarehouse(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const getAggregateShelfData = async () => {
-    try {
-      const res = await axios.get(
-        isLocal
-          ? `${localhost}/api/aggregate-shelf-items`
-          : isProduction && `${webhost}/api/aggregate-shelf-items`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      const data = res.data;
-      setGoods(data);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
 
   useEffect(() => {
+    const getWarehouseData = async () => {
+      try {
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/aggregate-goods`
+            : isProduction && `${webhost}/api/aggregate-goods`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        setWarehouse(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
     getWarehouseData();
+  }, [accessToken, isLocal, isProduction, localhost, webhost]);
+
+  useEffect(() => {
+    const getAggregateShelfData = async () => {
+      try {
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/aggregate-shelf-items`
+            : isProduction && `${webhost}/api/aggregate-shelf-items`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        const data = res.data;
+        setGoods(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
     getAggregateShelfData();
-  });
+  }, [accessToken, isLocal, isProduction, localhost, webhost]);
 
   //Here we update the model's properties. Initially, no inventory has left warehouse.
   const handleTransferToShelf = async (id) => {
@@ -64,14 +67,12 @@ const Shelf = ({ accessToken }) => {
         isLocal
           ? `${localhost}/api/aggregate-goods/${id}`
           : isProduction && `${webhost}/api/aggregate-goods/${id}`,
-        { headers: { Authorization: `Bearer${accessToken}` } }
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       console.log(res.data.message);
     } catch (err) {
       console.log(err.message);
     }
-    getWarehouseData();
-    getAggregateShelfData();
   };
 
   //dangerous api calls
@@ -93,7 +94,7 @@ const Shelf = ({ accessToken }) => {
         isLocal
           ? `${localhost}/api/warehouse`
           : isProduction && `${webhost}/api/warehouse`,
-        { headers: { Authorization: `Bearer${accessToken}` } }
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       )
       .then(() => {
         console.log("Deleted aggregate goods");
@@ -151,15 +152,12 @@ const Shelf = ({ accessToken }) => {
               size="lg"
               className="overflow-y-auto"
             >
-              <Modal.Header
-                className="bg-light"
-                closeButton
-                closeVariant="dark"
-              >
+              <Modal.Header className="bg-light" closeButton>
                 <Modal.Title>Current Customer Order</Modal.Title>
               </Modal.Header>
               <Modal.Body className="bg-light">
                 <ShoppingBasket
+                  accessToken={accessToken}
                   getShelfData={goods}
                   selectedProduct={selectedProduct}
                   setSelectedProduct={(e) => setSelectedProduct(e.target.value)}
@@ -190,10 +188,13 @@ const Shelf = ({ accessToken }) => {
                 <th>Action</th>
               </tr>
             </thead>
-            {goods.map(
-              (item, index) =>
-                item && <SalesTable element={item} key={`${item}-${index}`} />
-            )}
+            {goods.map((item, index) => (
+              <SalesTable
+                element={item}
+                key={`${item}-${index}`}
+                accessToken={accessToken}
+              />
+            ))}
           </Table>
           <div className="d-flex gap-3 ms-auto">
             <Button onClick={handleClearShelf} variant="danger" disabled={true}>

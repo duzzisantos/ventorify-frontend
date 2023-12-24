@@ -21,7 +21,7 @@ const TransferToShelf = ({
           </tr>
         </thead>
         <tbody>
-          {warehouse.length &&
+          {warehouse.length > 0 &&
             warehouse
               .filter((element) =>
                 element.totalProductCount !== 0 ? element : !element

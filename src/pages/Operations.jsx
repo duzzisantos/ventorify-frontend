@@ -39,24 +39,23 @@ const OperationLogs = ({ accessToken }) => {
   //REMEMBER TO BACKUP WAREHOUSE BEFORE TRANSFERRING TO SHELF
   //get warehouse data to generate operations report with
 
-  const getWarehouse = async () => {
-    try {
-      const res = await axios.get(
-        isLocal
-          ? `${localhost}/api/display-backup`
-          : isProduction && `${webhost}/api/display-backup`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
-      const data = res.data;
-      setWarehouse(data);
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
-
   useEffect(() => {
+    const getWarehouse = async () => {
+      try {
+        const res = await axios.get(
+          isLocal
+            ? `${localhost}/api/backup/display-backup`
+            : isProduction && `${webhost}/api/backup/display-backup`,
+          { headers: { Authorization: `Bearer ${accessToken}` } }
+        );
+        const data = res.data;
+        setWarehouse(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
     getWarehouse();
-  });
+  }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   //get purchase report data to generate operations report with
   useEffect(() => {
