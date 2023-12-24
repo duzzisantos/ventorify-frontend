@@ -34,7 +34,7 @@ const WarehouseLogs = ({
             </tr>
           </thead>
           <tbody className="overflow-y-auto">
-            {warehouse.map((task) => (
+            {warehouse?.map((task) => (
               <tr key={task._id}>
                 <td>{task.category}</td>
                 <td>{task.product}</td>

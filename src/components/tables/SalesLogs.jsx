@@ -33,7 +33,7 @@ const SalesLogs = ({
             </tr>
           </thead>
           <tbody>
-            {activity.map((sale) => (
+            {activity?.map((sale) => (
               <tr key={sale._id}>
                 <td>{sale.category}</td>
                 <td>{sale.product}</td>

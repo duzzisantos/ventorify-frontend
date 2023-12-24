@@ -70,13 +70,13 @@ const Orders = ({ accessToken }) => {
   const commonClasses =
     "fw-bold col-lg-2 gap-3 text-success border shadow-sm rounded-2 d-flex flex-column justify-content-center align-items-center py-4 col-md-4";
 
-  const countPaid = data.filter((d) => d.customerHasPaid).map((e) => e).length;
+  const countPaid = data?.filter((d) => d.customerHasPaid).map((e) => e).length;
   const countUnpaid = data
     .filter((f) => f.customerHasPaid === false)
     .map((g) => g).length;
 
   const accountReceivables = data
-    .filter((k) => k.customerHasPaid === false)
+    ?.filter((k) => k.customerHasPaid === false)
     .map((j) => j.revenue)
     .reduce((acc, curr) => acc + curr, 0);
 

@@ -188,7 +188,7 @@ const Shelf = ({ accessToken }) => {
                 <th>Action</th>
               </tr>
             </thead>
-            {goods.map((item, index) => (
+            {goods?.map((item, index) => (
               <SalesTable
                 element={item}
                 key={`${item}-${index}`}

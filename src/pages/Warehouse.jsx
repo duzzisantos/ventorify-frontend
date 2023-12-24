@@ -122,7 +122,9 @@ const WareHouse = ({ accessToken }) => {
           <tbody>
             {suggestion.length > 0 &&
               suggestion
-                .filter((data) => (data.totalProductCount < 100 ? data : !data))
+                ?.filter((data) =>
+                  data.totalProductCount < 100 ? data : !data
+                )
                 .map((item, index) => (
                   <tr key={index}>
                     <td>{item.category}</td>
