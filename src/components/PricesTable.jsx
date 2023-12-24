@@ -46,7 +46,12 @@ const PriceTable = ({ accessToken }) => {
       .delete(
         isLocal
           ? `${localhost}/api/price-list/${_id}`
-          : isProduction && `${webhost}/api/price-list/${_id}`
+          : isProduction && `${webhost}/api/price-list/${_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       )
       .then((res) => {
         console.log(res.statusText);
