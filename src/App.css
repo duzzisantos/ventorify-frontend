@@ -105,6 +105,10 @@ input {
   #side-bar {
     width: 200px !important;
   }
+
+  .mobile-left-shift {
+    margin-left: 10px !important;
+  }
 }
 
 @media screen and (max-width: 500px) {
