@@ -121,7 +121,7 @@ function App() {
                       element={<Notifications accessToken={accessToken} />}
                     />
                     <Route
-                      path="navbar/message-notification/email-details/:id"
+                      path="message-notification/email-details/:id"
                       element={<EmailPage accessToken={accessToken} />}
                     />
                   </>
