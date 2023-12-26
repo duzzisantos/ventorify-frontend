@@ -115,6 +115,10 @@ input {
   .hide-name {
     display: none;
   }
+
+  #the-landing-page {
+    display: none !important;
+  }
 }
 
 /* Login Style*/
