@@ -112,7 +112,7 @@ function Navigation() {
           size="sm"
           keyboard="false"
           backdrop="static"
-          style={{ marginLeft: "40%", marginTop: "2.5%" }}
+          style={{ marginLeft: "0%", marginTop: "2.5%" }}
         >
           <Modal.Header closeButton>
             <Modal.Title>Profile</Modal.Title>
