@@ -43,7 +43,7 @@ function App() {
     <div className="col-lg-12 App">
       {user && <Navigation />}
       <div
-        className={`col-lg-12 bg-white h-100 d-flex flex-lg-row major-wrapper pt-5`}
+        className={`col-lg-12 bg-white h-100 d-flex flex-lg-row justify-content-center major-wrapper pt-5`}
       >
         {user && (
           <SideBar
