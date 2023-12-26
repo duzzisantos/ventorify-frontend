@@ -59,8 +59,7 @@ function Navigation() {
           <Navbar.Collapse id="navbarScroll">
             <Nav
               className="me-auto my-2 my-lg-0 col-12"
-              style={{ maxHeight: "130px", color: "white" }}
-              navbarScroll
+              style={{ maxHeight: "200px", color: "white" }}
             >
               <NavLink
                 to={"/warehouse"}

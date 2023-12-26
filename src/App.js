@@ -43,7 +43,7 @@ function App() {
     <div className="col-lg-12 App">
       {user && <Navigation />}
       <div
-        className={`col-lg-12 bg-white h-100 d-flex flex-row major-wrapper pt-5`}
+        className={`col-lg-12 bg-white h-100 d-flex flex-lg-row major-wrapper pt-5`}
       >
         {user && (
           <SideBar
@@ -53,7 +53,7 @@ function App() {
           />
         )}
 
-        <main className="col-12">
+        <main className="col-12 col-sm-10">
           <ErrorBoundary>
             <Routes>
               {!user && pathname === "/login" ? (
