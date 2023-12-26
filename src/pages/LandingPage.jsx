@@ -25,7 +25,7 @@ const LandingPage = () => {
       <div className="container col-md-10 text-secondary pt-5 pb-5">
         <h1 className="fw-bold">Welcome to Ventorify </h1>
 
-        <div className="rows cols flex-wrap hstack gap-5 align-items-center justify-content-center p-4 pb-5">
+        <div className="rows cols flex-wrap hstack gap-5 align-items-center justify-content-center p-4 mt-3 pb-5">
           <LandingPageIntro />
           {data.map((item) => {
             const { title, description, id, image } = item;

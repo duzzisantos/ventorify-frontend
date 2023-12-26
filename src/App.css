@@ -119,6 +119,10 @@ input {
   #landing-page-intro {
     display: none !important;
   }
+
+  .mobile-left-shift {
+    margin-left: 10px !important;
+  }
 }
 
 /* Login Style*/

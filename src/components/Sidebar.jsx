@@ -36,7 +36,7 @@ const SideBar = ({ showSideBar, setShowSidebar, accessToken }) => {
   }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   return (
-    <div className="position-absolute mt-5 py-2 col-1">
+    <div className="position-absolute mt-5 py-2 col-1 mobile-left-shift">
       <div>
         <Button
           variant="transparent"
