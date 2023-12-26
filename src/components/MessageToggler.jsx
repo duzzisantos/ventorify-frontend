@@ -40,7 +40,7 @@ const MessageToggler = ({
           </span>
           <Link
             className="text-start text-secondary mt-2 mx-3"
-            to={`/navbar/message-notification/email-details/${element._id}`}
+            to={`/message-notification/email-details/${element._id}`}
           >
             {element.subject}
           </Link>
