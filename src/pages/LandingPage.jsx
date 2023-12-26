@@ -8,7 +8,7 @@ const LandingPage = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <div id="the-landing-page">
+    <div>
       {!user && (
         <div className="d-flex justify-content-end me-3 gap-3">
           <a

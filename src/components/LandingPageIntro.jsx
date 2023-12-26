@@ -15,6 +15,7 @@ const LandingPageIntro = () => {
   ];
   return (
     <div
+      id="landing-page-intro"
       className="col-12 justify-content-center d-flex flex-row"
       style={{ height: "400px" }}
     >
