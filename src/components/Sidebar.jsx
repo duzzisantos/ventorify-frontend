@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from "react";
+// import React, {  useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { http } from "../api-calls/http";
+// import { http } from "../api-calls/http";
 import {
   Activity,
   EnvelopeCheckFill,
   PeopleFill,
   PersonFill,
-  BellFill,
+  // BellFill,
   Basket2Fill,
   List,
 } from "react-bootstrap-icons";
-import axios from "axios";
+// import axios from "axios";
 
 const SideBar = ({ showSideBar, setShowSidebar, accessToken }) => {
-  const [count, setCount] = useState([]);
+  // const [count, setCount] = useState([]);
 
-  const { isLocal, isProduction, localhost, webhost } = http;
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get(
-          isLocal
-            ? `${localhost}/api/messages`
-            : isProduction && `${webhost}/api/messages`,
-          { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
-        setCount(res.data);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    getData();
-  }, [isLocal, isProduction, localhost, webhost, accessToken]);
+  // const { isLocal, isProduction, localhost, webhost } = http;
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         isLocal
+  //           ? `${localhost}/api/messages`
+  //           : isProduction && `${webhost}/api/messages`,
+  //         { headers: { Authorization: `Bearer ${accessToken}` } }
+  //       );
+  //       setCount(res.data);
+  //     } catch (err) {
+  //       console.log(err.message);
+  //     }
+  //   };
+  //   getData();
+  // }, [isLocal, isProduction, localhost, webhost, accessToken]);
 
   return (
     <div className=" mt-5 py-2 col-1 mobile-left-shift">
@@ -90,7 +90,7 @@ const SideBar = ({ showSideBar, setShowSidebar, accessToken }) => {
                 <EnvelopeCheckFill className="mx-auto" /> Send
               </NavLink>
             </div>
-            <div className="mx-3 my-4 lh-lg">
+            {/* <div className="mx-3 my-4 lh-lg">
               <NavLink
                 to={"/message-notification"}
                 className="text-decoration-none text-secondary"
@@ -110,7 +110,7 @@ const SideBar = ({ showSideBar, setShowSidebar, accessToken }) => {
                   Outbox
                 </div>
               </NavLink>
-            </div>
+            </div> */}
             <div className="mx-3 my-4 lh-lg">
               <NavLink
                 to={"/team"}
