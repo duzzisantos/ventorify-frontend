@@ -165,7 +165,7 @@ const ShoppingBasket = ({
           </Form>
 
           <div
-            className="bg-white shadow-sm rounded-2 px-2 py-2"
+            className=" shadow-sm rounded-2 px-2 py-2"
             style={{ height: "fit-content" }}
           >
             <h6 className="fw-bold mx-2 px-1">
@@ -221,7 +221,7 @@ const ShoppingBasket = ({
               ))}
             </Tabs>
           </div>
-          <section className="my-3 p-3 shadow-sm bg-white py-3 rounded-2">
+          <section className="my-3 p-3 shadow-sm py-3 rounded-2">
             <h6 className="fw-bold">Order Summary</h6>
             {generateOrder && customerId && customerName && (
               <div className="d-flex hstack gap-3">

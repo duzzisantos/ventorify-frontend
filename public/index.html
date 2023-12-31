@@ -42,6 +42,7 @@
   </body>
   <script>
     const mainDocument = document.querySelector("html");
+    const footer = document.getElementById("footer-element");
 
     let currentTime = new Date(Date.now()).getHours();
 
@@ -49,6 +50,7 @@
       mainDocument.setAttribute("data-bs-theme", "light");
     } else {
       mainDocument.setAttribute("data-bs-theme", "dark");
+      footer.style.backgroundColor = "black";
     }
   </script>
 </html>

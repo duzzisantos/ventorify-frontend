@@ -116,7 +116,7 @@ const PriceTable = ({ accessToken }) => {
         "...Price information is loading"
       ) : (
         <Table hover responsive>
-          <thead className="bg-secondary text-light">
+          <thead className="bg-secondary text-light border border-light">
             <tr className="text-start">
               <th>Product ID</th>
               <th>Product Name</th>

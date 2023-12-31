@@ -34,11 +34,8 @@ const TransferToShelf = ({
                   <td>{item.totalProductCount}</td>
                   <td>
                     <Button
-                      className={
-                        item.isInShelf
-                          ? "btn-danger"
-                          : "bg-transparent text-secondary border border-secondary"
-                      }
+                      variant="transparent"
+                      className="border border-secondary"
                       title="Transfer warehouse items to shelf"
                       onClick={(_id) => handleTransferToShelf(item._id)}
                     >

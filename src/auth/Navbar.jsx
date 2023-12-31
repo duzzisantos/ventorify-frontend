@@ -47,6 +47,7 @@ function Navigation() {
         className="col-md-12 mt-0 shadow-sm bg-light"
         fixed="top"
         style={{ zIndex: 1 }}
+        id="nav-bar-element"
       >
         <Container fluid>
           <Navbar.Brand className="fs-3 pt-0">
@@ -95,7 +96,7 @@ function Navigation() {
               <div className="ms-auto">
                 <Button
                   variant="transparent"
-                  className={`border border-secondary text-dark`}
+                  className="border border-secondary text-dark"
                   onClick={() => setShow(true)}
                 >
                   Profile

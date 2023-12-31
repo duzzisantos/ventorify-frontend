@@ -152,10 +152,10 @@ const Shelf = ({ accessToken }) => {
               size="lg"
               className="overflow-y-auto"
             >
-              <Modal.Header className="bg-light" closeButton>
+              <Modal.Header closeButton>
                 <Modal.Title>Current Customer Order</Modal.Title>
               </Modal.Header>
-              <Modal.Body className="bg-light">
+              <Modal.Body>
                 <ShoppingBasket
                   accessToken={accessToken}
                   getShelfData={goods}
