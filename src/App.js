@@ -18,7 +18,7 @@ import OperationLogs from "./pages/Operations";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ApplicationSettings from "./pages/Settings";
 import Team from "./pages/Team";
-import Notifications from "./pages/MessageNotification";
+// import Notifications from "./pages/MessageNotification";
 import EmailPage from "./pages/EmailPage";
 import Footer from "./components/Footer";
 import LandingPage from "./pages/LandingPage";
@@ -116,10 +116,10 @@ function App() {
                         <EmployeePerformance accessToken={accessToken} />
                       }
                     />
-                    <Route
+                    {/* <Route
                       path="message-notification/*"
                       element={<Notifications accessToken={accessToken} />}
-                    />
+                    /> */}
                     <Route
                       path="message-notification/email-details/:id"
                       element={<EmailPage accessToken={accessToken} />}

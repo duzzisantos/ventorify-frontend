@@ -43,8 +43,7 @@ const CreateRecord = ({ accessToken }) => {
 
   const { isLocal, isProduction, localhost, webhost } = http;
 
-  const handlePost = (e) => {
-    e.preventDefault();
+  const handlePost = () => {
     axios
       .post(
         isLocal
